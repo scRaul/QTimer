@@ -1,4 +1,3 @@
-const maxW = 600;
 class TimerElement{
     #view;
     #fillMax;//svg array segment length

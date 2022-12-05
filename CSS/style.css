@@ -11,7 +11,17 @@ html,body{
 }
 #stack{
     margin:0;
-    width:400px;
+    width: 400px;
+    height: 400px;
     overflow: auto;
     border: 2px solid whitesmoke;
+}
+input{
+    text-align: center;
+    border:none;
+    background-color: #433e3e;
+}
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button {  
+   opacity: 1;
 }

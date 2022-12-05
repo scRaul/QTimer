@@ -11,6 +11,7 @@
 
     <script src ="src/Activity.js"></script>
     <script src ="src/ActivityList.js"></script>
+    <script src ="src/ActivityForm.js"></script>
     <script src ="src/Timer.js"></script>
     <script src ="test/TestActivity.js"></script>
     <script src ="test/TestActivityList.js"></script>
@@ -25,23 +26,37 @@
         <div id="timer">
             <div id="timer_outer">
                 <div id="timer_inner">
-                <div id="timer_main">
-                    <p id="timer_clock">99:99</p>
-                    <p id="timer_activity"></p>
-                    <div id="control">
-                    <button id="multi_bttn" class="cntrl_bttn"> </button>
-                    <button id="timer_startB"> </button>
-                    <button id="drop_boxB" class="cntrl_bttn"> </button>
+                    <div id="timer_main" class="timerFace">
+                        <p id="timer_clock">99:99</p>
+                        <p id="timer_activity"></p>
+                        <div id="control" class ="timer_bttns">
+                            <button id="multi_bttn" class="cntrl_bttn"> </button>
+                            <button id="timer_startB"> </button>
+                            <button id="drop_boxB" class="cntrl_bttn"> </button>
+                         </div>
+                    </div>
+                    <div id="activity_form" class="timerFace">
+                        <div>
+                            <input id="form_min" type="Number" min="0" max="60" value=0> 
+                            <span id="form_colon">:</span>
+                            <input id="form_sec" type="Number" min="0" max="60" value=0>
+                        </div>
+                        <div>
+                            <input id="form_act" type="text"   placeholder="enter activity">
+                        </div>
+                        <br>
+                        <div class ="timer_bttns">
+                            <button id="form_enter" class="cntrl_bttn"> </button>
+                            <button id="form_blank" class="cntrl_bttn"> </button>
+                            <button id="form_delete" class="cntrl_bttn"> </button>
+                        </div>
+                    </div>
                 </div>
-                </div>
-                </div>
-                </div>
+            </div>
         </div>
         <div id="stack">
 
         </div>
     </div>  
-
-    </div>
 </body>
 </html>

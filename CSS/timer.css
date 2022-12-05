@@ -17,7 +17,14 @@
   box-shadow: inset -1px -1px 5px -1px yellow,
     inset 1px 1px 5px -1px yellow;
 }
-#timer_main{
+.timer_bttns{
+  margin: 0 auto;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.timerFace{
   height: 100%;
   display: flex;
   flex-direction: column;
