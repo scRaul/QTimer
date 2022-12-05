@@ -28,7 +28,7 @@ input{
     border:none;
     background-color: #433e3e;
     margin: 0;
-    border: 2px solid red;
+    justify-content: center;
     padding: 0;
 }
 /* Chrome, Safari, Edge, Opera */
@@ -45,7 +45,6 @@ input[type=number] {
 span{
     padding: 0;
     margin: 0;
-    border: 2px solid red;
 }
 
 .timeSlot{

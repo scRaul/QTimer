@@ -15,7 +15,12 @@ class ActivityList{
             this.#list.push(activity);
     }
     Count(){return this.#list.length;}
-    Index(){return this.#currentIndex;}
+    // returns the current Activity,
+    GetCurrent(){
+        if(this.#list.length = 0 ) return null;
+        if(this.#currentIndex >= this.length)
+            this.#currentIndex = 0;
+        return this.#list[this.#currentIndex];}
     GetList(){return this.#list; }
     // returns the next Activity in the list, or null if list is empty
     getNext(){

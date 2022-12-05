@@ -19,12 +19,12 @@ timerElement.getDropButton().addEventListener('click',toggleStackView.bind(this)
 var autoplay = document.getElementById('autoplay');
 
 var actList = new ActivityList();
-var currentActivity = null;
 var timer = new Timer(); 
 
 var actToIndex = { };
 var actToSlot = { };
 var editingActivity = null;
+var currentActivity = null;
 
 window.onload = window['preFill'];
 
@@ -89,6 +89,13 @@ function editSlot(e){
     editingActivity = e.activity;
 }
 function setcurrentActivity(){
+    if(currentActivity == null){
+        timer.setTime(0,0,0);
+        timerElement.setActivityName("Activity");
+        timerElement.setTime(0);
+        timerElement.setFill(1,1);//set to full 
+        return;
+    }
     timer.setTime(0,currentActivity.getMinutes(),currentActivity.getSeconds());
     timerElement.setActivityName(currentActivity.getName());
     timerElement.setTime(timer.getSecondsLeft());
@@ -156,11 +163,14 @@ function enterForm(){
 }
 function deleteForm(){
     if(editingActivity != null){
+        if(editingActivity == currentActivity){
+            currentActivity = actList.getNext();
+            setcurrentActivity();
+        }
         actList.removeActivity(actToIndex[editingActivity]);
         actToSlot[editingActivity].remove();
         actToSlot[editingActivity] = null;
         actToIndex[editingActivity] = -1;
     }
-    setcurrentActivity();
     disableForm();
 }
