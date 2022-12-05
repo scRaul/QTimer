@@ -17,9 +17,6 @@ timerElement.getStartButton().addEventListener('click',togglePause.bind(this));
 timerElement.getCntrlButton().addEventListener('click',handleCntrlClick.bind(this));
 timerElement.getDropButton().addEventListener('click',toggleStackView.bind(this));
 
-
-enableForm();
-
 function togglePause(){
     isTimerPaused = !isTimerPaused;
     timerElement.setStartButton(isTimerPaused);
