@@ -20,6 +20,7 @@
 /* W3Schools Toggle Button */
 /* The switch - the box around the slider */
 .switch {
+  margin: 0 auto;
   position: relative;
   display: inline-block;
   width: 30px;

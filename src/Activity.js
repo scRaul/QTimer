@@ -6,7 +6,7 @@ class Activity{
     #name;
     #minutes;
     #seconds;
-    constructor(name="activity",minutes=0,seconds=0){
+    constructor(name="new activity",minutes=0,seconds=0){
         this.#checkInput(name,minutes,seconds);
         this.#name = name;
         this.#minutes = minutes;

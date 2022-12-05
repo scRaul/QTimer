@@ -27,7 +27,7 @@ class TimerElement{
         this.#cntrlButton.style.cssText = `width:${iwidth / 10}px;height:${iwidth / 10}px`;
         this.#dropButton.style.cssText = `width:${iwidth / 10}px;height:${iwidth / 10}px`;
         this.#setPaused();
-        this.#dropButton.style.backgroundImage = "url('Images/dropBox.png')";
+        this.#dropButton.style.backgroundImage = "url('Images/dropBox_closed.png')";
         this.#dropButton.style.backgroundSize = "cover";
 
         let w = (owidth - iwidth) / 2;
@@ -60,17 +60,18 @@ class TimerElement{
     getDropButton(){return this.#dropButton;}
 
 
-    setActivityName(act) {
+    async setActivityName(act) {
         if(typeof act != 'string') return;
         var activity = this.#view.querySelector("#timer_activity");
         activity.innerHTML = act.toUpperCase();
         var f = 60;
         activity.style.fontSize = f + "px";
         var maxH = f;
+        await 1; // to ensure html has time to update elements;
         var h = activity.getBoundingClientRect().height;
         var w = activity.getBoundingClientRect().width;
         let inner = this.#view.querySelector("#timer_inner").getBoundingClientRect().width;
-        inner -= 10;
+        inner *= 7;
         while (h > maxH || w > inner) {
           f--;
           activity.style.fontSize = f + "px";
@@ -94,6 +95,15 @@ class TimerElement{
     setStartButton(bool){
         if(bool) this.#setPaused();
         else this.#setUnpaused();
+    }
+    setBoxButton(bool){
+        if(bool){
+            this.#dropButton.style.backgroundImage = "url('Images/dropBox_open.png')";
+            this.#dropButton.style.backgroundSize = "cover";
+        }else{
+            this.#dropButton.style.backgroundImage = "url('Images/dropBox_closed.png')";
+            this.#dropButton.style.backgroundSize = "cover";
+        }
     }
     #setPaused(){
         this.#startButton.style.backgroundImage = "url('Images/start.png')";

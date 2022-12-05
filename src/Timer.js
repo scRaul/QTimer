@@ -19,6 +19,7 @@ class Timer{
         this.#sec_left += seconds; 
         this.#ms_init = this.#ms_left = this.#sec_left * 1000; 
     }
+    getMsStart(){return this.#ms_init;}
     getMsLeft(){return this.#ms_left;}
     getSecondsLeft(){return this.#sec_left;}
     start(){

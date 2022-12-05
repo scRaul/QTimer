@@ -1,7 +1,7 @@
 const maxW = 600;
 var isStackDisplayed = false;
-var isTimerPaused = true;
 var isMainDisplayed = true;
+var isTimerPaused = true;
 
 var stackElement = document.getElementById('stack');
 stackElement.style.display = "none";
@@ -16,19 +16,114 @@ var timerElement = new TimerElement();
 timerElement.getStartButton().addEventListener('click',togglePause.bind(this));
 timerElement.getCntrlButton().addEventListener('click',handleCntrlClick.bind(this));
 timerElement.getDropButton().addEventListener('click',toggleStackView.bind(this));
+var autoplay = document.getElementById('autoplay');
 
+var actList = new ActivityList();
+var currentActivity = null;
+var timer = new Timer(); 
+
+var actToIndex = { };
+var actToSlot = { };
+var editingActivity = null;
+
+window.onload = window['preFill'];
+
+function preFill(){
+    actList.insert(new Activity('a',0,2));
+    actList.insert(new Activity('b',0,2));
+    actList.insert(new Activity('c',0,2));
+    currentActivity = actList.getNext();
+    var copy = [];
+    copy = actList.GetList();
+    let i = 0;
+    copy.forEach(act =>{
+        AddSlot(act,i);
+        i++;
+    });
+    setcurrentActivity();
+}
+async function updateTmer(){
+    if(isTimerPaused){
+        timer.stop();
+        return;
+    }
+    timerElement.setFill(timer.getMsStart(),timer.getMsLeft());
+    timerElement.setTime(timer.getSecondsLeft());
+    await new Promise(resolve => setTimeout(resolve, 5));
+    if(timer.getSecondsLeft() > 0)
+        updateTmer(); 
+    else{ 
+        if(autoplay.checked)
+            togglePause();
+        togglePause();
+    }
+}
+
+function AddSlot(activity,index){
+    if(! (activity instanceof Activity)){
+        console.error( `"${activity}" not added, not an instance of Activiy`);
+        return;
+    }
+    actToIndex[activity] = index;
+    var minutes = activity.getMinutes();
+    var seconds = activity.getSeconds();
+    minutes = (minutes < 10) ? `0${minutes}` : minutes;
+    seconds = (seconds < 10) ? `0${seconds}` : seconds;
+
+    slot = document.createElement("div");
+    slot.className = "timeSlot";
+    slot.innerHTML = `
+    <div class="slotTitle">
+      ${activity.getName().toUpperCase()}
+    </div>
+    <div class="slotTime">|${minutes}:${seconds}</div>
+    `;
+    slot.addEventListener("click",editSlot.bind(this, { slot: slot, activity: activity }));
+    stackElement.appendChild(slot);
+    actToSlot[activity]= slot;
+}
+
+function editSlot(e){
+    activityForm.preFillForm(e.activity);
+    enableForm();
+    editingActivity = e.activity;
+}
+function setcurrentActivity(){
+    timer.setTime(0,currentActivity.getMinutes(),currentActivity.getSeconds());
+    timerElement.setActivityName(currentActivity.getName());
+    timerElement.setTime(timer.getSecondsLeft());
+    timerElement.setFill(1,1);//set to full 
+    actToSlot[currentActivity].className = "timeSlot currentTimeSlot";
+}
 function togglePause(){
     isTimerPaused = !isTimerPaused;
     timerElement.setStartButton(isTimerPaused);
+    if(isTimerPaused) return;
+    if(timer.getSecondsLeft() == 0){
+        if(currentActivity != null){
+            actToSlot[currentActivity].className = "timeSlot";
+        }
+        currentActivity = actList.getNext(); 
+        setcurrentActivity();
+    }
+    timer.start();
+    updateTmer();
 }
+//RESTART AND ADD FUNCTIONALITY
+
 function handleCntrlClick(){
     if(isTimerPaused)
         enableForm();
-    else
-        console.log("RestartTimer");
+    else{//restart current activity
+        togglePause();
+        timer.reset();
+        setcurrentActivity();
+    }
+
 }
 function toggleStackView(){
     isStackDisplayed = !isStackDisplayed;
+    timerElement.setBoxButton(isStackDisplayed);
     if(isStackDisplayed)
         stackElement.style.display = "block";
     else
@@ -43,13 +138,29 @@ function disableForm(){
     isMainDisplayed = true;
     timerMain.style.display="flex";
     activityForm.hideForm();
+    editingSlot = null;
 }
-function enterForm(){
-
-
+function enterForm(){   
+    if(editingActivity == null){
+        var activity = activityForm.getActivity();
+        actList.insert(activity);
+        AddSlot(activity,actList.Count()-1);
+    }else{
+        var slot = actToSlot[editingActivity];
+        activityForm.update(editingActivity,slot);
+    }
+    if(currentActivity == null)
+        currentActivity = actList.getNext();
+    setcurrentActivity();
     disableForm();
 }
 function deleteForm(){
-
+    if(editingActivity != null){
+        actList.removeActivity(actToIndex[editingActivity]);
+        actToSlot[editingActivity].remove();
+        actToSlot[editingActivity] = null;
+        actToIndex[editingActivity] = -1;
+    }
+    setcurrentActivity();
     disableForm();
 }

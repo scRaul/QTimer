@@ -16,6 +16,7 @@ class ActivityList{
     }
     Count(){return this.#list.length;}
     Index(){return this.#currentIndex;}
+    GetList(){return this.#list; }
     // returns the next Activity in the list, or null if list is empty
     getNext(){
         if(this.#list.length == 0) return null;
@@ -33,7 +34,7 @@ class ActivityList{
     }
     toString(){
         var builder = "";
-        this.#list.foreach(activity =>{
+        this.#list.forEach(activity =>{
             builder += `{\n ${activity.toString()}\n}\n`
         })
     }

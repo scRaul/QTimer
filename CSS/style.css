@@ -10,11 +10,18 @@ html,body{
     flex-wrap: wrap;
 }
 #stack{
-    margin:0;
+    margin: 20px auto;
     width: 400px;
     height: 400px;
     overflow: auto;
     border: 2px solid whitesmoke;
+}
+h2{
+    margin: 0 auto;
+    text-align: center;
+}
+hr{
+    margin: 0 auto;
 }
 input{
     text-align: center;
@@ -39,4 +46,24 @@ span{
     padding: 0;
     margin: 0;
     border: 2px solid red;
+}
+
+.timeSlot{
+    margin: 1px auto;
+    width: 98%;
+}
+
+.currentTimeSlot{
+border: 2px solid yellow;
+}
+.slotTitle{
+display:inline;
+text-align: left;
+overflow:hidden;
+white-space:nowrap;
+}
+.slotTime{
+display: inline;
+float:right;
+padding-right: 5px;
 }

@@ -12,8 +12,6 @@ class ActivityForm{
         this.#act = document.getElementById("form_act");
         this.#enterButton = document.getElementById("form_enter");
         this.#deleteButton = document.getElementById("form_delete");
-
-
         this.hideForm();
         this.initialize();
     }
@@ -48,5 +46,47 @@ class ActivityForm{
     }
     showForm(){
         this.#form.style.display = "flex";
+    }
+    #clearForm(){
+        this.#act.value = "";
+        this.#min.value = 0;
+        this.#sec.value = 0;
+    }
+    getActivity(){
+        if(this.#min.value <= 0 && this.#sec.value <= 0) return;
+        let name = (this.#act.value == "" ) ? 'new activity':this.#act.value;
+        let min = (this.#min.value <=0 )  ? 0 : parseInt(this.#min.value);
+        let sec = (this.#sec.value <= 0)  ? 0 : parseInt(this.#sec.value);
+        this.#clearForm();
+        return new Activity(name,min,sec);
+    }
+    preFillForm(activity){
+        if(! (activity instanceof Activity)){
+            console.error( `"${activity}" not added, not an instance of Activiy`);
+            return;
+        }
+        this.#min.value = activity.getMinutes();
+        this.#sec.value = activity.getSeconds();
+        this.#act.value = activity.getName();
+    }
+    update(activity,slot){
+        if(! (activity instanceof Activity)){
+            console.error( `"${activity}" not added, not an instance of Activiy`);
+            return;
+        }
+        let name = (this.#act.value == "") ? 'new activity':this.#act.value;
+        let min = (this.#min.value <=0 )  ? 0 : parseInt(this.#min.value);
+        let sec = (this.#sec.value <= 0)  ? 0 : parseInt(this.#sec.value);
+        this.#clearForm();
+        activity.update(name,min,sec);
+        min = (min < 10) ? `0${min}` : min;
+        sec = (sec < 10) ? `0${sec}` : sec;
+        slot.innerHTML = `
+        <div class="slotTitle">
+            ${name.toUpperCase()}
+        </div>
+        <div class="slotTime">|${min}:${sec}</div>
+        `;
+
     }
 }
