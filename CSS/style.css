@@ -1,0 +1,15 @@
+html,body{
+    background-color: #353131;
+    color: white;
+    font-family: "Lucida Console", "Courier New", monospace;
+}
+#container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#stack{
+    width: 500px;
+    height: 500px;
+    border: 2px solid red;
+}
