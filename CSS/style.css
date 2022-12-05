@@ -10,7 +10,8 @@ html,body{
     flex-wrap: wrap;
 }
 #stack{
-    width: 500px;
-    height: 500px;
-    border: 2px solid red;
+    margin:0;
+    width:400px;
+    overflow: auto;
+    border: 2px solid whitesmoke;
 }
