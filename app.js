@@ -95,6 +95,7 @@ function editSlot(e){
     editingIndex = e.index;
 }
 function setcurrentActivity(){
+    console.log([currentActivity,actList.Count]);
     if(currentActivity == null && actList.Count() == 0){
         timer.setTime(0,0,0);
         timerElement.setActivityName("Activity");
@@ -172,12 +173,12 @@ function enterForm(){
 }
 function deleteForm(){
     if(editingActivity != null){
+        actList.removeActivity(editingIndex);
+        reEnterSlots();
         if(editingActivity == currentActivity){
             currentActivity = actList.getNext();
             setcurrentActivity();
         }
-        actList.removeActivity(editingIndex);
-        reEnterSlots();
     }
     disableForm();
 }
