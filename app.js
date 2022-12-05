@@ -29,9 +29,7 @@ var currentActivity = null;
 window.onload = window['preFill'];
 
 function preFill(){
-    actList.insert(new Activity('a',0,2));
-    actList.insert(new Activity('b',0,2));
-    actList.insert(new Activity('c',0,2));
+    actList.insert(new Activity('Example',1,0));
     currentActivity = actList.getNext();
     var copy = [];
     copy = actList.GetList();
@@ -145,7 +143,7 @@ function disableForm(){
     isMainDisplayed = true;
     timerMain.style.display="flex";
     activityForm.hideForm();
-    editingSlot = null;
+    editingActivity = null;
 }
 function enterForm(){   
     if(editingActivity == null){
@@ -160,6 +158,7 @@ function enterForm(){
         currentActivity = actList.getNext();
     setcurrentActivity();
     disableForm();
+    console.log(actList.toString());
 }
 function deleteForm(){
     if(editingActivity != null){

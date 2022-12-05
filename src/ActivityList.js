@@ -40,8 +40,9 @@ class ActivityList{
     toString(){
         var builder = "";
         this.#list.forEach(activity =>{
-            builder += `{\n ${activity.toString()}\n}\n`
-        })
+            builder += `{\n${activity.toString()}\n}\n`
+        });
+        return builder;
     }
 
 }
