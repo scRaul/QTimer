@@ -21,9 +21,10 @@ var autoplay = document.getElementById('autoplay');
 var actList = new ActivityList();
 var timer = new Timer(); 
 
-var actToIndex = { };
-var actToSlot = { };
 var editingActivity = null;
+var editingSlot = null;
+var editingIndex = -1;
+
 var currentActivity = null;
 
 window.onload = window['preFill'];
@@ -31,14 +32,21 @@ window.onload = window['preFill'];
 function preFill(){
     actList.insert(new Activity('Example',1,0));
     currentActivity = actList.getNext();
+    reEnterSlots()
+    setcurrentActivity();
+}
+function reEnterSlots(){
+    var slots = document.getElementsByClassName('timeSlot');
+    if(slots == null) return;
+    for(let i = 0; i < slots.length; i++)
+        slots[i].remove();
     var copy = [];
     copy = actList.GetList();
-    let i = 0;
+    let j = 0;
     copy.forEach(act =>{
-        AddSlot(act,i);
-        i++;
+        AddSlot(act,j);
+        j++;
     });
-    setcurrentActivity();
 }
 async function updateTmer(){
     if(isTimerPaused){
@@ -62,7 +70,6 @@ function AddSlot(activity,index){
         console.error( `"${activity}" not added, not an instance of Activiy`);
         return;
     }
-    actToIndex[activity] = index;
     var minutes = activity.getMinutes();
     var seconds = activity.getSeconds();
     minutes = (minutes < 10) ? `0${minutes}` : minutes;
@@ -76,29 +83,30 @@ function AddSlot(activity,index){
     </div>
     <div class="slotTime">|${minutes}:${seconds}</div>
     `;
-    slot.addEventListener("click",editSlot.bind(this, { slot: slot, activity: activity }));
+    slot.addEventListener("click",editSlot.bind(this, { slot: slot, activity: activity, index:index}));
     stackElement.appendChild(slot);
-    actToSlot[activity]= slot;
 }
 
 function editSlot(e){
     activityForm.preFillForm(e.activity);
     enableForm();
     editingActivity = e.activity;
+    editingSlot = e.slot;
+    editingIndex = e.index;
 }
 function setcurrentActivity(){
-    if(currentActivity == null){
+    if(currentActivity == null && actList.Count() == 0){
         timer.setTime(0,0,0);
         timerElement.setActivityName("Activity");
         timerElement.setTime(0);
         timerElement.setFill(1,1);//set to full 
         return;
     }
+    if(currentActivity == null) currentActivity = actList.getNext();
     timer.setTime(0,currentActivity.getMinutes(),currentActivity.getSeconds());
     timerElement.setActivityName(currentActivity.getName());
     timerElement.setTime(timer.getSecondsLeft());
     timerElement.setFill(1,1);//set to full 
-    actToSlot[currentActivity].className = "timeSlot currentTimeSlot";
 }
 function togglePause(){
     isTimerPaused = !isTimerPaused;
@@ -144,6 +152,8 @@ function disableForm(){
     timerMain.style.display="flex";
     activityForm.hideForm();
     editingActivity = null;
+    editingSlot = null;
+    editingIndex = null;
 }
 function enterForm(){   
     if(editingActivity == null){
@@ -151,11 +161,11 @@ function enterForm(){
         actList.insert(activity);
         AddSlot(activity,actList.Count()-1);
     }else{
-        var slot = actToSlot[editingActivity];
-        activityForm.update(editingActivity,slot);
+        activityForm.update(editingActivity,editingSlot);
     }
-    if(currentActivity == null)
+    if(currentActivity == null){
         currentActivity = actList.getNext();
+    }
     setcurrentActivity();
     disableForm();
     console.log(actList.toString());
@@ -166,10 +176,8 @@ function deleteForm(){
             currentActivity = actList.getNext();
             setcurrentActivity();
         }
-        actList.removeActivity(actToIndex[editingActivity]);
-        actToSlot[editingActivity].remove();
-        actToSlot[editingActivity] = null;
-        actToIndex[editingActivity] = -1;
+        actList.removeActivity(editingIndex);
+        reEnterSlots();
     }
     disableForm();
 }
