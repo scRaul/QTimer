@@ -32,11 +32,11 @@ class ActivityForm{
 
         let f = (owidth + iwidth) / (4 * 2.5);
         this.#min.style.fontSize = `${f}px`;
-        this.#min.style.width = `${1.3*f}px`;
+        this.#min.style.width = `${1.2*f}px`;
         this.#min.style.height= `${f}px`;
         document.getElementById("form_colon").style.fontSize = `${f}px`;
         this.#sec.style.fontSize = `${f}px`;
-        this.#sec.style.width = `${1.3*f}px`;
+        this.#sec.style.width = `${1.2*f}px`;
         this.#sec.style.height= `${f}px`;
         this.#act.style.width = `${iwidth-30}px`;
         this.#act.style.fontSize = `${f/2}px`;
