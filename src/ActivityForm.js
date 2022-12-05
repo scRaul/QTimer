@@ -30,7 +30,7 @@ class ActivityForm{
         this.#deleteButton.style.backgroundImage = "url('Images/delete.png')";
         this.#deleteButton.style.backgroundSize = "cover";
 
-        let f = (owidth + iwidth) / (4 * 2.5);
+        let f = (owidth + iwidth) / (9);
         this.#min.style.fontSize = `${f}px`;
         this.#min.style.width = `${1.2*f}px`;
         this.#min.style.height= `${f}px`;
