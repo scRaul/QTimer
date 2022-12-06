@@ -29,7 +29,7 @@ class ActivityList{
     getNext(){
         if(this.#list.length == 0) return null;
         this.#currentIndex++; 
-        if(this.#currentIndex == this.#list.length) this.#currentIndex = 0;
+        if(this.#currentIndex >= this.#list.length) this.#currentIndex = 0;
         return this.#list[this.#currentIndex];
     }
     front(){

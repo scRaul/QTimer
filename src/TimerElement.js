@@ -93,6 +93,11 @@ class TimerElement{
         if (f < this.#fillMax)
         this.#fill.style.strokeDashoffset = `${f}px`;
     }
+    setRefill(ms_start,ms_left){
+        var f = Math.floor(this.#fillMax * (ms_left / ms_start));
+        if (f >= 0)
+        this.#fill.style.strokeDashoffset = `${f}px`;
+    }
     setStartButton(bool){
         if(bool) this.#setPaused();
         else this.#setUnpaused();

@@ -19,6 +19,12 @@
 }
 /* W3Schools Toggle Button */
 /* The switch - the box around the slider */
+#sw{
+  font-size: 12px;
+  display: block;
+  margin: 0 auto;
+  float: left;
+}
 .switch {
   margin: 0 auto;
   position: relative;

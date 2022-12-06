@@ -21,7 +21,9 @@ var autoplay = document.getElementById('autoplay');
 
 var actList = new ActivityList();
 var timer = new Timer(); 
-
+var delayTimer = new Timer();
+delayTimer.setTime(0,0,3); // 5 second refill
+var delayOn = false;
 var editingActivity = null;
 var editingSlot = null;
 var editingIndex = -1;
@@ -43,8 +45,6 @@ function clearStorage(){
         sessionStorage.removeItem(key);
     });
 }
-
-
 function preFill(){
     let data = localStorage.getItem('stack');
     if(data != null){
@@ -100,9 +100,26 @@ async function updateTmer(){
         updateTmer(); 
         sessionStorage.setItem('msLeft',timer.getMsLeft());
      } else{ 
-        if(autoplay.checked)
+        if(!delayOn && delayTimer.getSecondsLeft() > 0){
             togglePause();
-        togglePause();
+            delayOn = true;
+            delayTimer.start();
+            timerElement.setFill(100,.1);
+            refillTimer();
+        }
+    }
+}
+async function refillTimer(){
+    timerElement.setRefill(delayTimer.getMsStart(),delayTimer.getMsLeft());
+    await new Promise(resolve => setTimeout(resolve, 5));
+    if(delayTimer.getSecondsLeft() > 0) 
+        refillTimer();
+    else{
+        delayOn = false;
+        sessionStorage.setItem('msLeft',timer.getMsStart());
+            if(autoplay.checked)
+                togglePause();
+        delayTimer.reset();
     }
 }
 
