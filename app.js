@@ -205,8 +205,10 @@ function disableForm(){
 function enterForm(){   
     if(editingActivity == null){
         var activity = activityForm.getActivity();
-        actList.insert(activity);
-        AddSlot(activity,actList.Count()-1);
+        if(activity != undefined && activity != null){
+            actList.insert(activity);
+            AddSlot(activity,actList.Count()-1);
+        }
     }else{
         actToSlot[editingActivity] = null;
         activityForm.update(editingActivity,editingSlot);
