@@ -2,6 +2,7 @@ const maxW = 600;
 var isStackDisplayed = false;
 var isMainDisplayed = true;
 var isTimerPaused = true;
+var canDelete = true; 
 
 var stackElement = document.getElementById('stack');
 stackElement.style.display = "none";
@@ -26,22 +27,22 @@ var editingSlot = null;
 var editingIndex = -1;
 
 var currentActivity = null;
-var actToSlot = {};
+var slotList = [];
+var actToSlot = {}
 
 window.onload = window['preFill'];
 
 function preFill(){
     actList.insert(new Activity('Pomo',3,0));
     actList.insert(new Activity('Short Break',1,0));
-    currentActivity = actList.getNext();
     reEnterSlots()
     setcurrentActivity();
 }
 function reEnterSlots(){
-    var slots = document.getElementsByClassName('timeSlot');
-    if(slots == null) return;
-    for(let i = 0; i < slots.length; i++)
-        slots[i].remove();
+    actToSlot = {};
+    for(let i = 0; i < slotList.length; i++)
+        slotList[i].remove();
+    slotList = [];
     var copy = [];
     copy = actList.GetList();
     let j = 0;
@@ -77,7 +78,7 @@ function AddSlot(activity,index){
     minutes = (minutes < 10) ? `0${minutes}` : minutes;
     seconds = (seconds < 10) ? `0${seconds}` : seconds;
 
-    slot = document.createElement("div");
+    var slot = document.createElement("div");
     slot.className = "timeSlot";
     slot.innerHTML = `
     <div class="slotTitle">
@@ -88,6 +89,7 @@ function AddSlot(activity,index){
     slot.addEventListener("click",editSlot.bind(this, { slot: slot, activity: activity, index:index}));
     stackElement.appendChild(slot);
     actToSlot[activity] = slot;
+    slotList.push(slot);
 }
 
 function editSlot(e){
@@ -158,6 +160,7 @@ function disableForm(){
     editingActivity = null;
     editingSlot = null;
     editingIndex = null;
+    canDelete = true;
 }
 function enterForm(){   
     if(editingActivity == null){
@@ -176,19 +179,22 @@ function enterForm(){
     }
     setcurrentActivity();
     disableForm();
-    console.log(actList.toString());
+    console.log("After Added: \n" + actList.toString());
 }
 function deleteForm(){
+    if(!canDelete) return;
     if(editingActivity != null){
+        canDelete = false;
         actList.removeActivity(editingIndex);
         editingSlot.remove();
         reEnterSlots();
-        if(editingActivity == currentActivity){
-            currentActivity = actList.getNext();
-            setcurrentActivity();
-        }
         if(!isTimerPaused)
             togglePause();
+        if(editingActivity == currentActivity)
+            currentActivity= actList.GetCurrent();
+        else
+            currentActivity = actList.getNext();
+        setcurrentActivity();
     }
     disableForm();
 }

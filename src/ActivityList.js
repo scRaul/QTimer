@@ -17,7 +17,7 @@ class ActivityList{
     Count(){return this.#list.length;}
     // returns the current Activity,
     GetCurrent(){
-        if(this.#list.length = 0 ) return null;
+        if(this.#list.length == 0 ) return null;
         if(this.#currentIndex >= this.length)
             this.#currentIndex = 0;
         return this.#list[this.#currentIndex];}
@@ -33,10 +33,9 @@ class ActivityList{
         if(this.#list.length) return this.#list[0];
     }
     removeActivity(index){
-        console.log(index);
         if(typeof index !='number')  return;
         if(index < 0 || index > this.#list.length) return;
-        this.#list.splice(index,1);
+        this.#list.splice(index,1)  ;
     }
     toString(){
         var builder = "";
