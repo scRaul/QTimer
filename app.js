@@ -4,6 +4,8 @@ var isMainDisplayed = true;
 var isTimerPaused = true;
 var canDelete = true; 
 
+var sfxTic = new Audio('Sounds/tick.wav');
+sfxTic.volume = 0.5;
 var stackElement = document.getElementById('stack');
 stackElement.style.display = "none";
 var timerMain = document.getElementById('timer_main');
@@ -88,6 +90,7 @@ function reEnterSlots(){
         j++;
     });
 }
+var prevSec=100;
 async function updateTmer(){
     if(isTimerPaused){
         timer.stop();
@@ -95,6 +98,11 @@ async function updateTmer(){
     }
     timerElement.setFill(timer.getMsStart(),timer.getMsLeft());
     timerElement.setTime(timer.getSecondsLeft());
+    if(timer.getSecondsLeft() < prevSec){
+         prevSec = timer.getSecondsLeft();
+         if(prevSec < 5)
+            sfxTic.play();
+    }
     await new Promise(resolve => setTimeout(resolve, 5));
     if(timer.getSecondsLeft() > 0){
         updateTmer(); 
