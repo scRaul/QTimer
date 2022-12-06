@@ -26,11 +26,13 @@ var editingSlot = null;
 var editingIndex = -1;
 
 var currentActivity = null;
+var actToSlot = {};
 
 window.onload = window['preFill'];
 
 function preFill(){
-    actList.insert(new Activity('Example',1,0));
+    actList.insert(new Activity('Pomo',3,0));
+    actList.insert(new Activity('Short Break',1,0));
     currentActivity = actList.getNext();
     reEnterSlots()
     setcurrentActivity();
@@ -85,6 +87,7 @@ function AddSlot(activity,index){
     `;
     slot.addEventListener("click",editSlot.bind(this, { slot: slot, activity: activity, index:index}));
     stackElement.appendChild(slot);
+    actToSlot[activity] = slot;
 }
 
 function editSlot(e){
@@ -107,6 +110,7 @@ function setcurrentActivity(){
     timerElement.setActivityName(currentActivity.getName());
     timerElement.setTime(timer.getSecondsLeft());
     timerElement.setFill(1,1);//set to full 
+    actToSlot[currentActivity].className = "timeSlot currentTimeSlot";
 }
 function togglePause(){
     isTimerPaused = !isTimerPaused;
@@ -161,7 +165,9 @@ function enterForm(){
         actList.insert(activity);
         AddSlot(activity,actList.Count()-1);
     }else{
+        actToSlot[editingActivity] = null;
         activityForm.update(editingActivity,editingSlot);
+        actToSlot[editingActivity] = editSlot;
         if(!isTimerPaused)
             togglePause();
     }
@@ -175,12 +181,14 @@ function enterForm(){
 function deleteForm(){
     if(editingActivity != null){
         actList.removeActivity(editingIndex);
+        editingSlot.remove();
         reEnterSlots();
         if(editingActivity == currentActivity){
             currentActivity = actList.getNext();
             setcurrentActivity();
         }
-        togglePause();
+        if(!isTimerPaused)
+            togglePause();
     }
     disableForm();
 }

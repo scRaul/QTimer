@@ -33,6 +33,7 @@ class ActivityList{
         if(this.#list.length) return this.#list[0];
     }
     removeActivity(index){
+        console.log(index);
         if(typeof index !='number')  return;
         if(index < 0 || index > this.#list.length) return;
         this.#list.splice(index,1);
