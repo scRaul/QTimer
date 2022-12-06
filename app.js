@@ -101,6 +101,7 @@ async function updateTmer(){
         sessionStorage.setItem('msLeft',timer.getMsLeft());
      } else{ 
         if(!delayOn && delayTimer.getSecondsLeft() > 0){
+            timerElement.setTime(0);
             togglePause();
             delayOn = true;
             delayTimer.start();
