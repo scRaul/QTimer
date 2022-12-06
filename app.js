@@ -32,11 +32,48 @@ var actToSlot = {}
 
 window.onload = window['preFill'];
 
+var dkeys = [];
+dkeys.push('stack');
+dkeys.push('index');
+dkeys.push('isPaused');
+dkeys.push('msLeft');
+function clearStorage(){
+    dkeys.forEach(key => {
+        localStorage.removeItem(key);
+        sessionStorage.removeItem(key);
+    });
+}
+
+
 function preFill(){
-    actList.insert(new Activity('Pomo',3,0));
-    actList.insert(new Activity('Short Break',1,0));
-    reEnterSlots()
+    let data = localStorage.getItem('stack');
+    if(data != null){
+       let actSet =  data.split('}\n');
+        for(let i = 0; i < actSet.length-1; i+=1){
+            let actData = actSet[i].split('\n');
+            let name = actData[0].split(' ')[1];
+            let minutes = parseInt(actData[1].split(' ')[1]);
+            let seconds = parseInt(actData[2].split(' ')[1]);
+            actList.insert(new Activity(name,minutes,seconds));
+        }
+    }
+    reEnterSlots();
+    let index = sessionStorage.getItem('index');
+    if(index != null){
+        while(index+1){
+            currentActivity = actList.getNext();
+            index--;
+        }
+    }
     setcurrentActivity();
+    let msLeft = sessionStorage.getItem('msLeft');
+    if(msLeft != null) {
+        timer.setMsLeft(parseInt(msLeft));
+        timerElement.setFill(timer.getMsStart(),timer.getMsLeft());
+        timerElement.setTime(timer.getSecondsLeft());
+    }
+    let pause  = sessionStorage.getItem('isPaused');
+    if(pause == 'false') togglePause();
 }
 function reEnterSlots(){
     actToSlot = {};
@@ -59,9 +96,10 @@ async function updateTmer(){
     timerElement.setFill(timer.getMsStart(),timer.getMsLeft());
     timerElement.setTime(timer.getSecondsLeft());
     await new Promise(resolve => setTimeout(resolve, 5));
-    if(timer.getSecondsLeft() > 0)
+    if(timer.getSecondsLeft() > 0){
         updateTmer(); 
-    else{ 
+        sessionStorage.setItem('msLeft',timer.getMsLeft());
+     } else{ 
         if(autoplay.checked)
             togglePause();
         togglePause();
@@ -113,9 +151,11 @@ function setcurrentActivity(){
     timerElement.setTime(timer.getSecondsLeft());
     timerElement.setFill(1,1);//set to full 
     actToSlot[currentActivity].className = "timeSlot currentTimeSlot";
+    sessionStorage.setItem('index',actList.GetIndex());
 }
 function togglePause(){
     isTimerPaused = !isTimerPaused;
+    sessionStorage.setItem('isPaused',isTimerPaused);
     timerElement.setStartButton(isTimerPaused);
     if(isTimerPaused) return;
     if(timer.getSecondsLeft() == 0){
@@ -179,7 +219,7 @@ function enterForm(){
     }
     setcurrentActivity();
     disableForm();
-    console.log("After Added: \n" + actList.toString());
+    localStorage.setItem('stack',actList.toString());
 }
 function deleteForm(){
     if(!canDelete) return;
@@ -190,11 +230,9 @@ function deleteForm(){
         reEnterSlots();
         if(!isTimerPaused)
             togglePause();
-        if(editingActivity == currentActivity)
-            currentActivity= actList.GetCurrent();
-        else
-            currentActivity = actList.getNext();
+        currentActivity = actList.getNext();
         setcurrentActivity();
+        localStorage.setItem('stack',actList.toString());
     }
     disableForm();
 }

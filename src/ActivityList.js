@@ -14,6 +14,9 @@ class ActivityList{
         else
             this.#list.push(activity);
     }
+    GetIndex(){
+        return this.#currentIndex;
+    }
     Count(){return this.#list.length;}
     // returns the current Activity,
     GetCurrent(){
@@ -40,7 +43,7 @@ class ActivityList{
     toString(){
         var builder = "";
         this.#list.forEach(activity =>{
-            builder += `{\n${activity.toString()}\n}\n`
+            builder += `{${activity.toString()}}\n`
         });
         return builder;
     }
