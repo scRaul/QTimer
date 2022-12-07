@@ -5,7 +5,9 @@ var isTimerPaused = true;
 var canDelete = true; 
 
 var sfxTic = new Audio('Sounds/tick.wav');
-sfxTic.volume = 0.5;
+var sfxRecharge = new Audio('Sounds/recharge.mp3');
+sfxTic.volume = 0.7;
+sfxRecharge.volume = 0.05;
 var stackElement = document.getElementById('stack');
 stackElement.style.display = "none";
 var timerMain = document.getElementById('timer_main');
@@ -107,7 +109,7 @@ async function updateTmer(){
     timerElement.setTime(timer.getSecondsLeft());
     if(timer.getSecondsLeft() < prevSec){
          prevSec = timer.getSecondsLeft();
-         if(prevSec < 5)
+         if(prevSec <= 5)
             sfxTic.play();
     }
     await new Promise(resolve => setTimeout(resolve, 5));
@@ -116,11 +118,13 @@ async function updateTmer(){
         sessionStorage.setItem('msLeft',timer.getMsLeft());
      } else{ 
         if(!delayOn && delayTimer.getSecondsLeft() > 0){
+            prevSec = 100;
             timerElement.setTime(0);
             togglePause();
             delayOn = true;
             delayTimer.start();
             timerElement.setFill(100,.1);
+            sfxRecharge.play();
             refillTimer();
         }
     }
