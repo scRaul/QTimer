@@ -63,7 +63,7 @@ class TimerElement{
     async setActivityName(act) {
         if(typeof act != 'string') return;
         var activity = this.#view.querySelector("#timer_activity");
-        activity.innerHTML = act.toUpperCase();
+        activity.innerHTML = act;
         var f = 60;
         activity.style.fontSize = f + "px";
         var maxH = f;

@@ -53,7 +53,14 @@ function preFill(){
        let actSet =  data.split('}\n');
         for(let i = 0; i < actSet.length-1; i+=1){
             let actData = actSet[i].split('\n');
-            let name = actData[0].split(' ')[1];
+            let nameField = actData[0].split(' ');
+            let name ="";
+            for(let n=1; n < nameField.length;n++){
+                name += nameField[n];
+                if(n < (nameField.length-1) )
+                    name+=" ";
+            }
+            if(name[length-1] == '\n') name[length-1] = "";
             let minutes = parseInt(actData[1].split(' ')[1]);
             let seconds = parseInt(actData[2].split(' ')[1]);
             actList.insert(new Activity(name,minutes,seconds));
@@ -146,7 +153,7 @@ function AddSlot(activity,index){
     slot.className = "timeSlot";
     slot.innerHTML = `
     <div class="slotTitle">
-      ${activity.getName().toUpperCase()}
+      ${activity.getName()}
     </div>
     <div class="slotTime">|${minutes}:${seconds}</div>
     `;
