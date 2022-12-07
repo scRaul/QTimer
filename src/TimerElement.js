@@ -52,8 +52,8 @@ class TimerElement{
         this.#view.appendChild(iconSvg);
         this.#fill = iconPath;
         this.setActivityName("activity");
-        this.setTime(3600);
-        this.setFill(1000,900);
+        this.setTime(0);
+        this.setFill(1,1);
     }
     getStartButton(){return this.#startButton;}
     getCntrlButton(){return this.#cntrlButton;}
