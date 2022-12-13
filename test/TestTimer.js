@@ -26,6 +26,16 @@ class TestTimer{
         msg = (notPassed == 0) ? msg+"passed": msg+"failed";
         console.log(msg);
     }
+    testCountUp(){
+        this.#timer.setToCountUp();
+        this.#timer.start();
+        this.#countUp();
+    }
+    async #countUp(){
+        console.log(this.#timer.getSecondsLeft());
+        await new Promise(resolve => setTimeout(resolve, 500));
+        this.#countUp();
+    }
     testTimePassed(){
         var t = 5;
         this.#timer.setTime(0,0,t); 
@@ -35,8 +45,8 @@ class TestTimer{
         this.#waitForResult();
     }
     async #waitForResult(){
-        if(this.#timer.getSecondsLeft() <= 0 ){ return this.#timePassedResult(); }
         console.log(this.#timer.getSecondsLeft());
+        if(this.#timer.getSecondsLeft() <= 0 ){ return this.#timePassedResult(); }
         await new Promise(resolve => setTimeout(resolve, 500));
         this.#waitForResult();
     }

@@ -25,6 +25,7 @@ class Timer{
         this.#ms_left = parseInt(ms);
         this.#sec_left = this.#ms_left / 1000;
     }
+    isPaused(){return this.#paused; }
     getMsStart(){return this.#ms_init;}
     getMsLeft(){return this.#ms_left;}
     getSecondsLeft(){return this.#sec_left;}
@@ -49,12 +50,13 @@ class Timer{
         this.#sec_left = Math.ceil(this.#ms_left/1000);
         this.#prev_time = startTime;
         await new Promise(r => setTimeout(r,(startTime+this.#TIC_DELAY)-Date.now() ));
-        if(this.#ms_left <= 0){
+        if(this.#ms_left < 0){
             this.#sec_left = 0; 
             this.#paused = true;
             return; 
         }
-        if(!this.#paused) this.#tic();
+        if(!this.#paused) 
+            this.#tic();
     }
     #checkInput(hours,minutes,seconds){
         if(typeof minutes != 'number' || typeof seconds != 'number' || typeof hours != 'number')

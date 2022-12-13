@@ -255,7 +255,7 @@ function enterForm(){
     }
     if(currentActivity == null){
         currentActivity = actList.getNext();
-    }
+     }
     setcurrentActivity();
     disableForm();
     localStorage.setItem('stack',actList.toString());
